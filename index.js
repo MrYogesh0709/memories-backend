@@ -4,6 +4,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import helmet from "helmet";
 import xss from "xss-clean";
+import bodyParser from "body-parser";
 import rateLimiter from "express-rate-limit";
 import postRoutes from "./routes/post.js";
 import userRoutes from "./routes/users.js";
@@ -20,10 +21,11 @@ app.use(
   })
 );
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+app.use(bodyParser.json({ limit: "50mb" })); // increase limit to 50mb
+app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" })); // increase
 app.use(helmet());
 app.use(xss());
+app.use(cors());
 
 const connect = async () => {
   try {
