@@ -12,17 +12,17 @@ const app = express();
 dotenv.config();
 
 app.set("trust proxy", 1);
-// app.use(bodyParser.json({ limit: "50mb" }));
-// app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
-app.use(express.json());
-// app.use(
-//   rateLimiter({
-//     windowMs: 15 * 60 * 1000, // 15 minutes
-//     max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
-//     standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-//     legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-//   })
-// );
+app.use(express.json({ limit: "50mb" }));
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
+app.use(
+  rateLimiter({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+    standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+    legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+  })
+);
 app.use(helmet());
 app.use(xss());
 app.use(cors());
